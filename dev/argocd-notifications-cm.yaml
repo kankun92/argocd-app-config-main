@@ -34,3 +34,8 @@ data:
       title: Application {{.app.metadata.name}} has been successfully synced
       text: Application {{.app.metadata.name}} has been successfully synced at {{.app.status.operationState.finishedAt}}.
       summary: "{{.app.metadata.name}} sync succeeded"
+  trigger.on-sync-succeeded: |
+    - description: Application syncing has succeeded
+      send:
+      - app-sync-succeeded
+      when: app.status.operationState.phase in ['Succeeded']
