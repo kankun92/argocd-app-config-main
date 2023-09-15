@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: notification-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: notification-container
+          image: curlimages/curl:latest
+          args:
+            - "curl"
+            - "-X"
+            - "POST"
+            - "-H"
+            - "Content-Type: application/json"
+            - "--data"
+            - "{\"text\":\"Deployment of hello-world completed successfully!\"}"
+            - "$(MICROSOFT_TEAMS_WEBHOOK_URL)"
+          env:
+            - name: MICROSOFT_TEAMS_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: microsoft-teams-secret
+                  key: webhook-url
+      restartPolicy: Never

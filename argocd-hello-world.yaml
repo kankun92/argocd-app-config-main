@@ -9,14 +9,15 @@ spec:
     namespace: default
   source:
     repoURL: https://github.com/kankun92/argocd-app-config-main
-    path: /hello-world.yaml
+    path: hello-world.yaml
     targetRevision: HEAD
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+      post:
+        - name: notify-microsoft-teams
+          hook:
+            afterSync: true
+            command: ["/bin/sh", "-c", "kubectl apply -f notification-job.yaml"]
   project: default
-  notifications:
-    - name: microsoft-teams
-      microsoftTeams:
-        url: "https://gearmentinc.webhook.office.com/webhookb2/da8bc72c-48cb-4434-b7c0-16955b9690c6@92ab7646-e7fe-4eb7-a29b-436d706c0a3d/IncomingWebhook/31784b1ea7e64ce6b9c801cc7d1ab35a/f62080b2-0210-4a9c-ad65-b737537be39a"
